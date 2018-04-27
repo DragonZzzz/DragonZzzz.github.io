@@ -193,14 +193,14 @@
 </ul>
 <p>Vgg等结构最后使用fc或者global pooling使得features对于干扰很鲁棒，并且对于变换不敏感。<br>最近的语义分割结构考虑到spatial resolution的问题，使用的Deconv，dilated convolution等方法。 </p>
 <p>现在的语义分割方法只考虑了localization问题而忽略了classification问题，使得网络对于input不鲁棒，并且网络的Effective Receptive Field并不能像理论的一样覆盖整幅图像。</p>
-<p><img src="（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network/1524746918256.png" alt="Alt text"></p>
+<p><img src="/2018/04/27/（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network/1524746918256.png" alt="Alt text"></p>
 <p>Global Convolution Network结构的示意图如下：</p>
-<p><img src="（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network/1524746510845.png" alt="Alt text"></p>
+<p><img src="/2018/04/27/（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network/1524746510845.png" alt="Alt text"></p>
 <p>利用这样一个结构拟合大的卷积核，并且能够明显的减小计算上的开销。相比于k*k的卷积核，GCN只有$O(2/k)$的开销和参数数量。</p>
 <hr>
-<h2 id="Residual-based-Boundaries-Refinement"><a href="#Residual-based-Boundaries-Refinement" class="headerlink" title="Residual-based Boundaries Refinement"></a>Residual-based Boundaries Refinement</h2><p>一个很简单的残差结构用于优化边缘，作者并没有太详细的描述这个结构为什么work，只是通过实验证明了。<br><img src="（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network/1524747005894.png" alt="Alt text"></p>
+<h2 id="Residual-based-Boundaries-Refinement"><a href="#Residual-based-Boundaries-Refinement" class="headerlink" title="Residual-based Boundaries Refinement"></a>Residual-based Boundaries Refinement</h2><p>一个很简单的残差结构用于优化边缘，作者并没有太详细的描述这个结构为什么work，只是通过实验证明了。<br><img src="/2018/04/27/（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network/1524747005894.png" alt="Alt text"></p>
 <hr>
-<h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><p><img src="（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network/1524747082401.png" alt="Alt text"></p>
+<h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><p><img src="/2018/04/27/（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network/1524747082401.png" alt="Alt text"></p>
 
             <div class="clearfix"></div>
             <hr class="nogutter">
