@@ -176,12 +176,19 @@
           2018-04-27
       </time>
     
+    
+    | 
+    <a href='/tags/paper/'>paper</a>
+    
+    
 </span>
                 <h1>（CVPR2017）Large Kernel Matters-Imporve Semantic Segmantation By Global Convolution Network</h1>
             </div>
         </div>
         <div class="col-md-8 col-md-offset-2">
-      		<p>Face++在CVPR2017年的工作，在PASCAL VOC 2012上有82.2%的效果。</p>
+      		<blockquote>
+<p>Face++在CVPR2017年的工作，在PASCAL VOC 2012上有82.2%的效果。</p>
+</blockquote>
 <p>通过最近的很多Semantic Segmentation的模型我们可以发现，小的卷积核广泛地用于这些模型中，因为大量小的卷积核能够拟合大卷积核的效果，但是在计算上的开销要小的多。 但是本文中，作者从<strong>localization</strong>和<strong>classification</strong>两个方面阐述，大的卷积核可以提供更好的效果。不同于直接使用大的卷积核，作者提出了Global  Convolution Network，保证了计算上的开销相对于直接使用大卷积核足够小。   同时，一个简单的residual-based boundaries refinement 用于优化分割的边缘。</p>
 <hr>
 <h2 id="Global-Convolution-Network"><a href="#Global-Convolution-Network" class="headerlink" title="Global Convolution Network"></a>Global Convolution Network</h2><p>还是讨论语义分割中的两个主要问题：</p>

@@ -186,7 +186,45 @@
             </div>
         </div>
         <div class="col-md-8 col-md-offset-2">
-      		
+      		<blockquote>
+<p>大连理工的Huchuan Lu组在CVPR18上有多篇关于Salient object detection的文章，这是其中的一篇。</p>
+</blockquote>
+<hr>
+<p><strong>Motivation</strong></p>
+<ul>
+<li>作者观察过去的FCN-based 方法中直接结合multi-level的特征而没有对其做其他处理（比如权重），比如不是所有特征，所有spatial position在salient detection中是一样重要的，，需要给feature的不同channel和不同的spatial position利用Attention机制加上权重，否则之后产生一些冗余的细节从而影响网络的效果。本文提出一个 <strong>attention guided network</strong>，progressively融合multi-level的特征。Attention机制可以更好的消除背景信息的干扰。</li>
+<li>同时，作者发现过去的方法会利用side-output features，但是浅层的特征没有global information，这会影响效果。利用一个<strong>multi-path recurrent connections</strong>，将global information从top layer 传递到shallow layers中，refine整个网络。</li>
+</ul>
+<p>作者在文中利用了一张图来形象地说明了本文的Motivation：</p>
+<p><img src="/2018/04/27/CVPR2018-Progressive-Attention-Guided-Recurrent-Network-for-Salient-Object-Detection/1524823333885.png" alt="Alt text"></p>
+<hr>
+<p>总的来说，作者在本文中使用了以下几个技巧或模块</p>
+<ul>
+<li><strong>Spatial Attention(SA)</strong></li>
+<li><strong>Channel-wise Attention</strong></li>
+<li><strong>Progressive Attention Guided</strong></li>
+<li><strong>Multi-path Recurrent Connections</strong></li>
+</ul>
+<hr>
+<h2 id="Spatial-Attention-and-Channel-wise-Attention"><a href="#Spatial-Attention-and-Channel-wise-Attention" class="headerlink" title="Spatial Attention and Channel-wise Attention"></a>Spatial Attention and Channel-wise Attention</h2><p>两种Attention，使用的都是Softmax Attention，将Attention作用在了不同的地方。<br>以Spatial Attention为例:<br>给定一个feature $f \in R^{W \times H \times C}$.首先生成一个Summarized feature map，<br>$m = W<em>{s} * f + b</em>{s}$<br>其中$*$代表卷积操作，之后利用Softmax操作产生在位置$l$上的attention权重，<br>$a<em>{s}(l) = \frac{e^m(l)}{sum</em>{l’ \in L}e^{m(l’)}}$<br>$a_{s}$是Attention map，<br>Channel-wise Attention同理。</p>
+<hr>
+<h2 id="Progressive-Attention-Guided"><a href="#Progressive-Attention-Guided" class="headerlink" title="Progressive Attention Guided"></a>Progressive Attention Guided</h2><p>在计算出了spatial attention map 和channel-wise attention之后，作者利用这两个模块组成attention module计算layer-wise attention features.如下图所示：</p>
+<p><img src="/2018/04/27/CVPR2018-Progressive-Attention-Guided-Recurrent-Network-for-Salient-Object-Detection/1524824302079.png" alt="Alt text"></p>
+<p>利用里算出的Layer-wise attention features 帮助下一个stage生成新的attention map。 第$L$阶段生成的The attention features  用于帮助生成第$L-1$阶段attention的生成。</p>
+<p><img src="/2018/04/27/CVPR2018-Progressive-Attention-Guided-Recurrent-Network-for-Salient-Object-Detection/1524828538409.png" alt="Alt text"></p>
+<p>$UP(.)_{2}$代表2倍上采样，运算符号代表element-wise addition operation。具体结构图如下所示：</p>
+<p><img src="/2018/04/27/CVPR2018-Progressive-Attention-Guided-Recurrent-Network-for-Salient-Object-Detection/1524828621832.png" alt="Alt text"></p>
+<p>两个Attention加入网络后的的对比可视化效果：</p>
+<p><img src="/2018/04/27/CVPR2018-Progressive-Attention-Guided-Recurrent-Network-for-Salient-Object-Detection/1524828969534.png" alt="Alt text"></p>
+<p>可见能后很好的融合multi-level contextual information并且更好的避免背景信息的干扰。</p>
+<hr>
+<h2 id="Multi-Path-Recurrent-Guidance-Module"><a href="#Multi-Path-Recurrent-Guidance-Module" class="headerlink" title="Multi-Path Recurrent Guidance Module"></a>Multi-Path Recurrent Guidance Module</h2><p>因为缺乏global的信息，所有side-output通常含有冗余的细节。要解决这个问题，关键的一点是如何提高网络主干的学习效果。借鉴之前的工作，这里提出了这种方法。 将最后一层输出链接到之前的几层中去再训练，从而使得浅层的特征获得high-level的信息，拥有更好的识别能力。</p>
+<p><img src="/2018/04/27/CVPR2018-Progressive-Attention-Guided-Recurrent-Network-for-Salient-Object-Detection/1524829350730.png" alt="Alt text"></p>
+<p>定义$H_{l}$为第$l$个block的输出特征。论文中有这样的定义：</p>
+<p><img src="/2018/04/27/CVPR2018-Progressive-Attention-Guided-Recurrent-Network-for-Salient-Object-Detection/1524829440227.png" alt="Alt text"></p>
+<p>说明$t$时间$l$层的特征不仅和$t$时间$l-1$层的特征有关，还与$t-1$时刻最后一层的特征有关。<br>其中$U<em>{l}^{t}$和$b</em>{U_{l}}^{t}$为在训练中自适应学习的参数。</p>
+<p>通过这种方法，可以使用较浅的网络结构依然能有效的提取到global、high-level的信息。相比于深层的网络结构，这种的开销更小更省时。<br>最后时刻的输出就是最终的预测saliency map。</p>
+
             <div class="clearfix"></div>
             <hr class="nogutter">
         </div>
