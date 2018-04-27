@@ -181,26 +181,27 @@
             </div>
         </div>
         <div class="col-md-8 col-md-offset-2">
-      		<p>#（CVPR2017）Large Kernel Matters-Imporve Semantic Segmantation By Global Convolution Network</p>
-<hr>
-<p>Face++在CVPR2017年的工作，在PASCAL VOC 2012上有82.2%的效果。</p>
+      		<h1 id="（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network"><a href="#（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network" class="headerlink" title="（CVPR2017）Large Kernel Matters-Imporve Semantic Segmantation By Global Convolution Network"></a>（CVPR2017）Large Kernel Matters-Imporve Semantic Segmantation By Global Convolution Network</h1><p>Face++在CVPR2017年的工作，在PASCAL VOC 2012上有82.2%的效果。</p>
 <p>通过最近的很多Semantic Segmentation的模型我们可以发现，小的卷积核广泛地用于这些模型中，因为大量小的卷积核能够拟合大卷积核的效果，但是在计算上的开销要小的多。 但是本文中，作者从<strong>localization</strong>和<strong>classification</strong>两个方面阐述，大的卷积核可以提供更好的效果。不同于直接使用大的卷积核，作者提出了Global  Convolution Network，保证了计算上的开销相对于直接使用大卷积核足够小。   同时，一个简单的residual-based boundaries refinement 用于优化分割的边缘。</p>
 <hr>
-<p>##Global Convolution Network<br>还是讨论语义分割中的两个主要问题：</p>
+<h2 id="Global-Convolution-Network"><a href="#Global-Convolution-Network" class="headerlink" title="Global Convolution Network"></a>Global Convolution Network</h2><p>还是讨论语义分割中的两个主要问题：</p>
 <ul>
 <li><strong>localization</strong> : fully convolutional and no fully-connected and pooling， transformation-sensitive</li>
 <li><strong>classification</strong> : 需要网络中存在densely connections用于获取global information，从而实现transformation-invariant<br>可以说，这两个问题本身就是矛盾的，Global Convolution Network就是想同时处理这两种问题。</li>
 </ul>
 <p>Vgg等结构最后使用fc或者global pooling使得features对于干扰很鲁棒，并且对于变换不敏感。<br>最近的语义分割结构考虑到spatial resolution的问题，使用的Deconv，dilated convolution等方法。 </p>
-<p>现在的语义分割方法只考虑了localization问题而忽略了classification问题，使得网络对于input不鲁棒，并且网络的Effective Receptive Field并不能像理论的一样覆盖整幅图像。</p>
+<p>现在的语义分割方法只考虑了localization问题而忽略了classification问题，使得网络对于input不鲁棒，并且网络的Effective Receptive Field并不能像理论的一样覆盖整幅图像。<br>如下图所示，对于A图片，网络的RF能够很好的感知整个鸟，而将input做一个变换为图B之后，网络的RF则不能很好的感知整个鸟，影响了网络的识别效果。</p>
 <p><img src="/2018/04/27/（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network/1524746918256.png" alt="Alt text"></p>
-<p>Global Convolution Network结构的示意图如下：</p>
+<p>从<strong>localization</strong>的角度来看，网络中不能含有fc层和glocal pooling层，而从<strong>classification</strong>的角度看，网路走红的卷积层的kernel需要足够的大用于提供巨大的RF，这就时网络设计的两个原则，基于这两个原则，提出了GCN。<br>Global Convolution Network结构的示意图如下：</p>
 <p><img src="/2018/04/27/（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network/1524746510845.png" alt="Alt text"></p>
 <p>利用这样一个结构拟合大的卷积核，并且能够明显的减小计算上的开销。相比于k*k的卷积核，GCN只有$O(2/k)$的开销和参数数量。</p>
 <hr>
 <h2 id="Residual-based-Boundaries-Refinement"><a href="#Residual-based-Boundaries-Refinement" class="headerlink" title="Residual-based Boundaries Refinement"></a>Residual-based Boundaries Refinement</h2><p>一个很简单的残差结构用于优化边缘，作者并没有太详细的描述这个结构为什么work，只是通过实验证明了。<br><img src="/2018/04/27/（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network/1524747005894.png" alt="Alt text"></p>
 <hr>
-<h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><p><img src="/2018/04/27/（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network/1524747082401.png" alt="Alt text"></p>
+<h2 id="Architecture"><a href="#Architecture" class="headerlink" title="Architecture"></a>Architecture</h2><p>整个网络的结构如下图所示，可见，对于网络中的每个block的输出，使用提出的GCN和BR处理之后再逐层将处理后的结果结合到一起得到最后的score map<br><img src="/2018/04/27/（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network/1524747082401.png" alt="Alt text"></p>
+<h2 id="Expereiment"><a href="#Expereiment" class="headerlink" title="Expereiment"></a>Expereiment</h2><p>具体其他的对比实验可以详见论文，这里只展示了作者提出的两个模块的效果分析。</p>
+<p><img src="/2018/04/27/（CVPR2017）Large-Kernel-Matters-Imporve-Semantic-Segmantation-By-Global-Convolution-Network/1524810172387.png" alt="Alt text"></p>
+<p>可见BR对于boundaries有很好的效果（localization），而GCN对于Internal效果也很突出。（classification）<br>这也印证了两个模块分别是从localization和callssification的两个角度上提出的改进。</p>
 
             <div class="clearfix"></div>
             <hr class="nogutter">
